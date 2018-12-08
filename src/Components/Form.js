@@ -1,12 +1,48 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Form extends Component{
+    constructor() {
+        super();
+        this.onChange = this.onChange.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    static = {
+        onSubmit: PropTypes.func
+    }
+
+    state = {
+        name: '',
+        phone: ''
+    }
+
+    onChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        this.props.addContact({
+            ...this.state
+        });
+
+        this.setState({
+           name: '',
+           phone: ''
+        });
+    }
+
     render() {
         return(
             <div>
-                <input type={"text"} name={"name"} id={"name"} placeholder={"Enter a name"}/>
-                <input type={"tel"} name={"phone"} id={"phone"} placeholder={"Enter a phone"}/>
-                <button className={"btn"}>Add</button>
+                <form onSubmit={this.onSubmit}>
+                    <input type={"text"} name={"name"} id={"name"} value={this.state.name} onChange={this.onChange} placeholder={"Enter a name"}/>
+                    <input type={"tel"} name={"phone"} id={"phone"} value={this.state.phone} onChange={this.onChange} placeholder={"Enter a phone"}/>
+                    <button className={"btn"}>Add</button>
+                </form>
             </div>
         );
     }
